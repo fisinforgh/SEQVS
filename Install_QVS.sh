@@ -115,9 +115,12 @@ if [ $? -ne 0 ] || [ -z "$PROJECT_DIR" ]; then
     exit 1
 fi
 
-git clone https://github.com/fisinforgh/QVS.git
-cp -r "$PROJECT_DIR/QVS" "$PROJECT_DIR/"
-rm -rf "$PROJECT_DIR/QVS"
+git clone https://github.com/fisinforgh/SEQVS.git
+cp -r "$PROJECT_DIR/SEQVS/QVS" "$PROJECT_DIR/"
+rm -rf "$PROJECT_DIR/SEQVS"
+
+
+
 
 echo "[Desktop Entry]
 Version=1.0
