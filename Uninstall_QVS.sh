@@ -41,9 +41,9 @@
 ###############################################################################
 
 
-zenity --question --title="Desinstalación de My Project" --width=400 --height=200 --text="¿Deseas desinstalar My Project?" --ok-label="Sí" --cancel-label="No"
+zenity --question --title="Desinstalación de QVS" --width=400 --height=200 --text="¿Deseas desinstalar My Project?" --ok-label="Sí" --cancel-label="No"
 if [ $? -eq 0 ]; then
-    zenity --question --title="Eliminar Dependencias" --width=400 --height=200 --text="Se eliminarán todas las dependencias relacionadas con My Project. ¿Deseas continuar?" --ok-label="Sí" --cancel-label="No"
+    zenity --question --title="Eliminar Dependencias" --width=400 --height=200 --text="Se eliminarán todas las dependencias relacionadas con QVS. ¿Deseas continuar?" --ok-label="Sí" --cancel-label="No"
     if [ $? -eq 0 ]; then
         SYSTEM_PACKAGES=("git" "python3" "python3-tk" "python3-matplotlib" "python3-numpy" "python3-scipy")
         for package in "${SYSTEM_PACKAGES[@]}"; do
@@ -59,7 +59,7 @@ if [ $? -eq 0 ]; then
     fi
 
     echo "Buscando la carpeta del proyecto..."
-    project_paths=$(find /home -type d -name "QVS_core" 2>/dev/null)
+    project_paths=$(find /home -type d -name "QVS" 2>/dev/null)
 
     if [ -n "$project_paths" ]; then
         for project_path in $project_paths; do
@@ -70,7 +70,7 @@ if [ $? -eq 0 ]; then
         echo "Carpeta no encontrada."
     fi
 
-    trash_paths=$(find ~/.local/share/Trash/files/ -type d -name "QVS_core" 2>/dev/null)
+    trash_paths=$(find ~/.local/share/Trash/files/ -type d -name "QVS" 2>/dev/null)
     if [ -n "$trash_paths" ]; then
         for trash_path in $trash_paths; do
             echo "Carpeta encontrada en la papelera: $trash_path"
