@@ -7,7 +7,7 @@ from matplotlib.ticker import MaxNLocator
 plt.rcParams['toolbar'] = 'none'
 plt.rcParams['mathtext.fontset'] = 'cm'  # Usa la fuente Computer Modern para matemáticas
 font_params = {"fontsize": 16, "fontweight": "bold", "fontstyle": "italic"}
-plt.rcParams['axes3d.mouserotationstyle'] = 'azel' 
+#plt.rcParams['axes3d.mouserotationstyle'] = 'azel' 
 
 
 E = {'E1': lambda a, b:  (105.0*a**2 + 42.0*a*b + 5.9999999999997*b**2)/(21*a**2 + 9*a*b + b**2),
