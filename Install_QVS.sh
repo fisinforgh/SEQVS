@@ -115,15 +115,15 @@ if [ $? -ne 0 ] || [ -z "$PROJECT_DIR" ]; then
     exit 1
 fi
 
-git clone https://github.com/juandwt/My_Project.git
-cp -r "$PROJECT_DIR/My_Project/QVS_core" "$PROJECT_DIR/"
-rm -rf "$PROJECT_DIR/My_Project"
+git clone https://github.com/fisinforgh/QVS.git
+cp -r "$PROJECT_DIR/QVS" "$PROJECT_DIR/"
+rm -rf "$PROJECT_DIR/QVS"
 
 echo "[Desktop Entry]
 Version=1.0
 Name=QVS
-Exec=python3 $PROJECT_DIR/QVS_core/main.py
-Icon=$PROJECT_DIR/QVS_core/Images/logo.svg
+Exec=python3 $PROJECT_DIR/QVS/main.py
+Icon=$PROJECT_DIR/QVS/Images/logo.svg
 Type=Application
 Terminal=false
 Categories=Development;" > "$DESKTOP_DIR/QVS.desktop"
