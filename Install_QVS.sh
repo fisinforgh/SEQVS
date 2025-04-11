@@ -115,7 +115,7 @@ if [ $? -ne 0 ] || [ -z "$PROJECT_DIR" ]; then
     exit 1
 fi
 
-git clone https://github.com/fisinforgh/SEQVS.git
+git clone https://github.com/fisinforgh/SEQVS.git "$PROJECT_DIR/SEQVS"
 cp -r "$PROJECT_DIR/SEQVS/QVS" "$PROJECT_DIR/"
 rm -rf "$PROJECT_DIR/SEQVS"
 
