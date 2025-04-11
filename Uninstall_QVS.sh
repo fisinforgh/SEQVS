@@ -41,7 +41,7 @@
 ###############################################################################
 
 
-zenity --question --title="Desinstalación de QVS" --width=400 --height=200 --text="¿Deseas desinstalar My Project?" --ok-label="Sí" --cancel-label="No"
+zenity --question --title="Desinstalación de QVS" --width=400 --height=200 --text="¿Deseas desinstalar QVS?" --ok-label="Sí" --cancel-label="No"
 if [ $? -eq 0 ]; then
     zenity --question --title="Eliminar Dependencias" --width=400 --height=200 --text="Se eliminarán todas las dependencias relacionadas con QVS. ¿Deseas continuar?" --ok-label="Sí" --cancel-label="No"
     if [ $? -eq 0 ]; then
