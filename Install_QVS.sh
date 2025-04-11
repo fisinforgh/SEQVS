@@ -41,7 +41,7 @@
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 
-zenity --info --title="Bienvenido al instalador" --width=400 --height=200 --text="Vamos a verificar las dependencias" --ok-label="Continuar"
+zenity --info --title="Bienvenido al instalador de QVS" --width=400 --height=200 --text="Vamos a verificar las dependencias" --ok-label="Continuar"
 if [ $? -ne 0 ]; then
     echo "Instalación cancelada por el usuario."
     exit 0
@@ -140,4 +140,4 @@ if [ $? -ne 0 ]; then
     exit 0
 fi
 
-zenity --info --width=500 --height=200 --text="¡Gracias por instalar My Project!" --ok-label="Finalizar"
+zenity --info --width=500 --height=200 --text="¡Gracias por instalar QVS!" --ok-label="Finalizar"
