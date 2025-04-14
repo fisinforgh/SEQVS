@@ -1,17 +1,16 @@
 #!/bin/bash
 
-
 ###############################################################################
 #                                                                             #
 #                              NOTICE OF COPYRIGHT                            #
 # Educational software aimed at teaching the variational method in            #
-# confined quantum systems.                                                    #
+# confined quantum systems.                                                   #
 #                              SEQVS                                          #
 #                                                                             #
 # Copyright (C) 2025                                                          #
 #                                                                             #
 # Authors:                                                                    #
-#   [1] Juan Diego Wilches Torres*                            	              #
+#   [1] Juan Diego Wilches Torres*                                            #
 #   [2] Julian Andrés Salamanca Bernal**                                      #
 #   [3] Diego Julián Rodríguez-Patarroyo***                                   #
 #                                                                             #
@@ -19,12 +18,12 @@
 #   [2] jasalamanca@udistrital.edu.co (profesor Universidad Distrital)        #
 #   [3] djrodriguezp@udistrital.edu.co (profesor Universidad Distrital)       #
 #                                                                             #
-#  *,** Grupo de Física e Informática (FISINFOR)		                      #
-#  *** Grupo de Laboratorio de Fuentes Alternas de Energía (LIFAE)	          #
-#  *,**,*** Universidad Distrital Francisco José de Caldas (Bogotá, Colombia) #	
+#  *,** Grupo de Física e Informática (FISINFOR)                              #
+#  *** Grupo de Laboratorio de Fuentes Alternas de Energía (LIFAE)           #
+#  *,**,*** Universidad Distrital Francisco José de Caldas (Bogotá, Colombia) # 
 #                                                                             #
 # Web page:                                                                   #
-#   https://github.com/fisinforgh/QVS                                          #
+#   https://github.com/fisinforgh/QVS                                         #
 #                                                                             #
 # This program is free software; you can redistribute it and/or modify        #
 # it under the terms of the GNU General Public License as published by        #
@@ -40,17 +39,27 @@
 #                                                                             #
 ###############################################################################
 
-
 zenity --question --title="Desinstalación de QVS" --width=400 --height=200 --text="¿Deseas desinstalar QVS?" --ok-label="Sí" --cancel-label="No"
 if [ $? -eq 0 ]; then
-    zenity --question --title="Eliminar Dependencias" --width=400 --height=200 --text="Se eliminarán todas las dependencias relacionadas con QVS. ¿Deseas continuar?" --ok-label="Sí" --cancel-label="No"
+
+    eliminar_dependencias=false
+
+    zenity --question --title="Eliminar Dependencias" --width=400 --height=200 \
+        --text="¿Deseas eliminar también las dependencias del sistema instaladas con QVS?" \
+        --ok-label="Sí (Automáticamente)" --cancel-label="No (Lo haré manualmente)"
+
     if [ $? -eq 0 ]; then
+        eliminar_dependencias=true
+    fi
+
+    if [ "$eliminar_dependencias" = true ]; then
         SYSTEM_PACKAGES=("git" "python3-tk" "python3-matplotlib" "python3-numpy" "python3-scipy")
         for package in "${SYSTEM_PACKAGES[@]}"; do
             if dpkg -l | grep -q "^ii  $package "; then
                 sudo apt remove --purge -y "$package"
             fi
         done
+        sudo apt autoremove -y
     fi
 
     DESKTOP_DIR=$(xdg-user-dir DESKTOP)
@@ -78,7 +87,11 @@ if [ $? -eq 0 ]; then
         done
     fi
 
-    zenity --info --width=400 --height=200 --text="Desinstalación completada exitosamente."
+    if [ "$eliminar_dependencias" = true ]; then
+        zenity --info --width=400 --height=200 --text="Desinstalación completada exitosamente.\n\nLas dependencias del sistema también fueron eliminadas."
+    else
+        zenity --info --width=400 --height=200 --text="Desinstalación completada exitosamente.\n\nLas dependencias NO fueron eliminadas."
+    fi
 
 else
     zenity --info --width=400 --height=200 --text="Desinstalación cancelada."
