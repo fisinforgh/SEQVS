@@ -77,7 +77,7 @@ fi
 
 install_method=$(zenity --list --title="Instalación de dependencias" \
     --text="Elige cómo deseas instalar las dependencias faltantes:" \
-    --width=400 --height=200 \
+    --width=400 --height=300 \
     --radiolist --column="Seleccionar" --column="Método" \
     TRUE "Instalar automáticamente" FALSE "Instalar manualmente")
 
