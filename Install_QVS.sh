@@ -49,65 +49,69 @@ fi
 
 SYSTEM_PACKAGES=("git" "python3" "python3-tk" "python3-matplotlib" "python3-numpy" "python3-scipy")
 
-check_packages_status() {
-    package_status=()
-    package_installed=() 
-    all_installed=true  
+package_status=()
+package_installed=()
+all_installed=true
 
-    for package in "${SYSTEM_PACKAGES[@]}"; do
-        if apt list --installed 2>/dev/null | grep -q "^$package/"; then
-            package_status+=("✔" "$package" "Instalado" "sudo apt install -y $package")
-            package_installed+=(1) 
-        else
-            package_status+=("✘" "$package" "No instalado" "sudo apt install -y $package")
-            package_installed+=(0)
-            all_installed=false
-        fi
-    done
-
-    zenity --list --title="Verificación de Dependencias" \
-        --text="Estado de los paquetes necesarios:" \
-        --width=750 --height=410 \
-        --column="Estado" --column="Paquete" --column="Disponibilidad" --column="Comando de instalación" \
-        "${package_status[@]}"
-    
-    if [ $? -ne 0 ]; then
-        echo "Instalación cancelada por el usuario durante la verificación de dependencias."
-        exit 0
+for package in "${SYSTEM_PACKAGES[@]}"; do
+    if apt list --installed 2>/dev/null | grep -q "^$package/"; then
+        package_status+=("✔" "$package" "Instalado" "sudo apt install -y $package")
+        package_installed+=(1)
+    else
+        package_status+=("✘" "$package" "No instalado" "sudo apt install -y $package")
+        package_installed+=(0)
+        all_installed=false
     fi
+done
 
-    if [ "$all_installed" = false ]; then
-        for package in "${SYSTEM_PACKAGES[@]}"; do
-            if ! apt list --installed 2>/dev/null | grep -q "^$package/"; then
-                if [ "$package" == "git" ]; then
-                    zenity --warning --width=400 --height=200 --text="git no está instalado. Procederemos a instalarlo."
-                    if [ $? -ne 0 ]; then
-                        echo "Instalación cancelada por el usuario."
-                        exit 0
-                    fi
-                fi
-                sudo apt install -y "$package"
+zenity --list --title="Verificación de Dependencias" \
+    --text="Estado de los paquetes necesarios:" \
+    --width=750 --height=410 \
+    --column="Estado" --column="Paquete" --column="Disponibilidad" --column="Comando de instalación" \
+    "${package_status[@]}"
+
+if [ $? -ne 0 ]; then
+    echo "Instalación cancelada por el usuario durante la verificación de dependencias."
+    exit 0
+fi
+
+install_method=$(zenity --list --title="Instalación de dependencias" \
+    --text="Elige cómo deseas instalar las dependencias faltantes:" \
+    --width=400 --height=200 \
+    --radiolist --column="Seleccionar" --column="Método" \
+    TRUE "Instalar automáticamente" FALSE "Instalar manualmente")
+
+if [ $? -ne 0 ]; then
+    echo "Instalación cancelada por el usuario en la elección de método."
+    exit 0
+fi
+
+if [ "$install_method" = "Instalar manualmente" ]; then
+    zenity --info --text="Has elegido instalar las dependencias manualmente. Finalizando el instalador."
+    exit 0
+fi
+
+if [ "$all_installed" = false ]; then
+    for package in "${SYSTEM_PACKAGES[@]}"; do
+        if ! apt list --installed 2>/dev/null | grep -q "^$package/"; then
+            if [ "$package" == "git" ]; then
+                zenity --warning --width=400 --height=200 --text="git no está instalado. Procederemos a instalarlo."
                 if [ $? -ne 0 ]; then
-                    zenity --error --width=400 --height=200 --text="Error al instalar $package. Verifica tu conexión o permisos."
-                    exit 1
+                    echo "Instalación cancelada por el usuario."
+                    exit 0
                 fi
             fi
-        done
-        zenity --info --width=500 --height=200 --text="Las dependencias faltantes se han instalado correctamente." --ok-label="Continuar"
-        if [ $? -ne 0 ]; then
-            echo "Instalación cancelada por el usuario."
-            exit 0
+            sudo apt install -y "$package"
+            if [ $? -ne 0 ]; then
+                zenity --error --width=400 --height=200 --text="Error al instalar $package. Verifica tu conexión o permisos."
+                exit 1
+            fi
         fi
-    else
-        zenity --info --width=500 --height=200 --text="Todas las dependencias ya estaban instaladas." --ok-label="Continuar"
-        if [ $? -ne 0 ]; then
-            echo "Instalación cancelada por el usuario."
-            exit 0
-        fi
-    fi
-}
-
-check_packages_status
+    done
+    zenity --info --width=500 --height=200 --text="Las dependencias faltantes se han instalado correctamente." --ok-label="Continuar"
+else
+    zenity --info --width=500 --height=200 --text="Todas las dependencias ya estaban instaladas." --ok-label="Continuar"
+fi
 
 PROJECT_DIR=$(zenity --file-selection --directory --title="Selecciona el directorio donde deseas guardar el proyecto")
 if [ $? -ne 0 ] || [ -z "$PROJECT_DIR" ]; then
@@ -118,9 +122,6 @@ fi
 git clone https://github.com/fisinforgh/SEQVS.git "$PROJECT_DIR/SEQVS"
 cp -r "$PROJECT_DIR/SEQVS/QVS" "$PROJECT_DIR/"
 rm -rf "$PROJECT_DIR/SEQVS"
-
-
-
 
 echo "[Desktop Entry]
 Version=1.0
@@ -135,9 +136,4 @@ chmod +x "$DESKTOP_DIR/QVS.desktop"
 gio set "$DESKTOP_DIR/QVS.desktop" metadata::trusted true
 
 zenity --info --width=500 --height=200 --text="El acceso directo ha sido creado en el Escritorio" --ok-label="Continuar"
-if [ $? -ne 0 ]; then
-    echo "Instalación cancelada por el usuario."
-    exit 0
-fi
-
 zenity --info --width=500 --height=200 --text="¡Gracias por instalar QVS!" --ok-label="Finalizar"
