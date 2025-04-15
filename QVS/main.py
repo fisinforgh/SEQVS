@@ -165,13 +165,6 @@ class Gui:
                                        font=("Helvetica", 12, "bold"))
         self.current_system.place(relx=0.5, rely=0.1, anchor="center")
     
-    def limit(self, *args):
-        value = self.epochs_var.get()
-        if value.isdigit():
-            if int(value)>100:
-                self.epochs_var.set("1000")
-        else:
-            self.epochs_var.set("")
     
     # ==========
     #   Manual 
@@ -195,7 +188,8 @@ class Gui:
                 os.path.abspath("Images/manual_p1.png"), 
                 os.path.abspath("Images/manual_p2.png"),
                 os.path.abspath("Images/manual_p3.png"),
-                os.path.abspath("Images/manual_p4.png")
+                os.path.abspath("Images/manual_p4.png"),
+                os.path.abspath("Images/manual_p5.png")
                 ]
 
         imagen = mpimg.imread(self.manual_pages[self.page_index])
@@ -211,8 +205,8 @@ class Gui:
         self.notebook.select(self.tabs["Manual"])
     
     def next_page(self):
-        if self.page_index ==4:
-            self.page_index = 4 
+        if self.page_index ==5:
+            self.page_index = 5 
         else:
             self.page_index +=1
             self.Manual()
