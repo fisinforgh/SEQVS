@@ -10,7 +10,7 @@ from matplotlib.ticker import MaxNLocator
 plt.rcParams['toolbar'] = 'none'
 plt.rcParams['mathtext.fontset'] = 'cm'  # Usa la fuente Computer Modern para matemáticas
 font_params = {"fontsize": 16, "fontweight": "bold", "fontstyle": "italic"}
-#plt.rcParams['axes3d.mouserotationstyle'] = 'azel' 
+plt.rcParams['axes3d.mouserotationstyle'] = 'azel' 
 
 
 def gauss_well(V0):
@@ -119,7 +119,7 @@ def function_2p(n_param):
     ax.set_zlabel(r'$E(\alpha, \beta)$', fontsize=16)
 
     ax.grid(False)
-    ax.set_title(r"$\mathrm{Average\ energy\ calculation} \, \langle E_{1}(\alpha, \beta) \rangle = \frac{\langle \Psi_{1}(x) | \hat{H} | \Psi_{1}(x) \rangle}{\langle \Psi_{1}(x) | \Psi_{1}(x) \rangle}$", fontsize=16, family="serif")
+    ax.set_title(r"$\mathrm{Average\ energy\ calculation}~~\langle E_{%d}(α, β) \rangle = \frac{\langle \Psi_{%d}(x) | \hat{H} | \Psi_{%d}(x) \rangle}{\langle \Psi_{%d}(x) | \Psi_{%d}(x) \rangle}$" % (n, n, n, n, n), fontsize=16)
     fig.text(0.5, 0.05, r"$\mathrm{Select\ a\ point\ \in ~~E(\alpha_{i}, \beta_{i})}$" , ha='center', fontsize=16, color="#4a6c65", family="serif")
     return a_values, b_values
 
@@ -145,7 +145,7 @@ def minimizacion(a_values, b_values, l_r, e_p, p_1, p_2):
         dE_da, dE_db = numerical_derivate(E_func, theta_a, theta_b)
         theta_a     -= lr * dE_da 
         theta_b     -= lr * dE_db
-        if i%2 ==0:
+        if i%2 ==0 or i == iters - 1:
             last_thetas_a.append(theta_a)
             last_thetas_b.append(theta_b)
     
@@ -225,6 +225,7 @@ def minimizacion(a_values, b_values, l_r, e_p, p_1, p_2):
     ax.set_zlabel(r'$E(\alpha, \beta)$', fontsize=16)
 
     ax.grid(False)
+
     title = ax.set_title(fr"$\hat{{H}}| \Psi_{{{n}}}\rangle= {round(E_func(p_1, p_2), 2)}|\Psi_{{{n}}}\rangle$" "\n"
                          ""  , fontsize=16, y=1.1)
 
@@ -263,9 +264,7 @@ def minimizacion(a_values, b_values, l_r, e_p, p_1, p_2):
     def update(frame):
         line.set_data(E_x[:frame], E_y[:frame])
         line.set_3d_properties(E_z[:frame])
-        #title.set_text(fr"$H | \Psi_{{{n}}} \rangle = {round(E_z[frame - 1], 2)}|\Psi_{{{n}}}\rangle$" "\n" 
-        #               fr"$Error ={np.round(np.mean(np.abs(-0.5 * d2_f + V * f  -  round(E_z[frame - 1], 2) * f)), 3)}$")
-        title.set_text(fr"$\hat{{H}} | \Psi_{{{n}}} \rangle = {round(E_z[frame - 1], 2)} |\Psi_{{{n}}} \rangle, \quad J_{{error}} = \frac{{1}}{{N}} \sum_{{i=1}}^{{N}} \left| \hat{{H}} |\Psi_{{{n}}} \rangle - E_{{{n}}} |\Psi_{{{n}}} \rangle \right|^2 = {np.round(np.mean(np.abs(-0.5 * d2_f + V * f  -  round(E_z[frame - 1], 2) * f)), 3)}$")
+        title.set_text(fr"$\hat{{H}} | \Psi_{{{n}}} \rangle = {round(E_z[frame - 1], 2)} |\Psi_{{{n}}} \rangle, \quad J_{{error}} = \frac{{1}}{{N}} \sum_{{i=1}}^{{N}} \left| \hat{{H}} |\Psi_{{{n}}} \rangle - E_{{{n}}} |\Psi_{{{n}}} \rangle \right|^2 = {np.round(np.mean(np.abs(-0.5 * d2_f + V * f  -  round(E_z[frame - 1], 2) * f)), 3)},  \quad \text{{Step}} = {2 * frame}$")
         return line, title
     
     ani = FuncAnimation(fig, update, frames=len(E_x), init_func=init, blit=False, interval=50, repeat=False)
