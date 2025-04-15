@@ -264,7 +264,7 @@ def minimizacion(a_values, b_values, l_r, e_p, p_1, p_2):
     def update(frame):
         line.set_data(E_x[:frame], E_y[:frame])
         line.set_3d_properties(E_z[:frame])
-        title.set_text(fr"$\hat{{H}} | \Psi_{{{n}}} \rangle = {round(E_z[frame - 1], 2)} |\Psi_{{{n}}} \rangle, \quad J_{{error}} = \frac{{1}}{{N}} \sum_{{i=1}}^{{N}} \left| \hat{{H}} |\Psi_{{{n}}} \rangle - E_{{{n}}} |\Psi_{{{n}}} \rangle \right|^2 = {np.round(np.mean(np.abs(-0.5 * d2_f + V * f  -  round(E_z[frame - 1], 2) * f)), 3)},  \quad \text{{Step}} = {2 * frame}$")
+        title.set_text(fr"$\hat{{H}} | \Psi_{{{n}}} \rangle = {round(E_z[frame - 1], 2)} |\Psi_{{{n}}} \rangle, \quad J_{{error}} = \frac{{1}}{{N}} \sum_{{i=1}}^{{N}} \left| \hat{{H}} |\Psi_{{{n}}} \rangle - E_{{{n}}} |\Psi_{{{n}}} \rangle \right|^2 = {np.round(np.mean(np.abs(-0.5 * d2_f + V * f  -  round(E_z[frame - 1], 2) * f)), 3)},  \quad \mathrm{{Step}} = {2 * frame}$")
         return line, title
     
     ani = FuncAnimation(fig, update, frames=len(E_x), init_func=init, blit=False, interval=50, repeat=False)
