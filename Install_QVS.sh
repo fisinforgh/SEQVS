@@ -127,7 +127,7 @@ echo "[Desktop Entry]
 Version=1.0
 Name=QVS
 Exec=python3 $PROJECT_DIR/QVS/main.py
-Icon=$PROJECT_DIR/QVS/Images/logo.svg
+Icon=$PROJECT_DIR/QVS/Images/logo.png
 Type=Application
 Terminal=false
 Categories=Development;" > "$DESKTOP_DIR/QVS.desktop"
