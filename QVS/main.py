@@ -63,6 +63,12 @@ class Gui:
         self.window.bind("<Configure>", self.resize_frames)
         self.create_widgets()
 
+        self.style.map("TNotebook.Tab", foreground=[("disabled", "#d4d4d4")])
+        
+        for i in self.window_names:
+            self.notebook.tab(self.window_names.index(i), state="disabled")
+
+
     def create_widgets(self):
 
         self.Energy_l = tk.Entry(self.left_half, width=6, bg=colors['green_1'], fg="white", bd=1, relief="flat",
@@ -165,13 +171,14 @@ class Gui:
                                        font=("Helvetica", 12, "bold"))
         self.current_system.place(relx=0.5, rely=0.1, anchor="center")
     
-    
+        
     # ==========
     #   Manual 
     # ==========
 
     def Manual(self):
 
+        self.notebook.tab(self.window_names.index("Manual"), state="normal")
         self.next_page.config(state="normal")
         self.previous_page.config(state="normal")
 
@@ -184,7 +191,6 @@ class Gui:
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
         self.manual_pages = [
-                os.path.abspath("Images/welcome.jpg"), 
                 os.path.abspath("Images/manual_p1.png"), 
                 os.path.abspath("Images/manual_p2.png"),
                 os.path.abspath("Images/manual_p3.png"),
@@ -205,8 +211,8 @@ class Gui:
         self.notebook.select(self.tabs["Manual"])
     
     def next_page(self):
-        if self.page_index ==5:
-            self.page_index = 5 
+        if self.page_index ==4:
+            self.page_index = 4 
         else:
             self.page_index +=1
             self.Manual()
@@ -219,6 +225,8 @@ class Gui:
             self.Manual()
 
     def select_system_box(self):
+        
+        self.notebook.tab(self.window_names.index("Hamiltonian"), state="normal")
         
         self.Energy_label.config(state="normal")
         self.manual.config(state="normal")
@@ -244,6 +252,8 @@ class Gui:
         self.notebook.select(self.tabs["Hamiltonian"])
 
     def select_system_gauss(self):
+        
+        self.notebook.tab(self.window_names.index("Hamiltonian"), state="normal")
 
         self.Energy_label.config(state="normal")
         self.current_system.config(text="Gauss Well")
@@ -269,6 +279,8 @@ class Gui:
 
     def select_system_ao(self):
   
+        self.notebook.tab(self.window_names.index("Hamiltonian"), state="normal")
+
         self.Energy_label.config(state="normal")
         self.current_system.config(text="Anharmonic Oscillator")
 
@@ -293,7 +305,10 @@ class Gui:
 
     def logo(self):
 
-        tab_name = self.notebook.nametowidget(".!frame.!notebook.!frame")
+        self.notebook.tab(self.window_names.index("Manual"), state="normal")
+        self.notebook.select(self.tabs["Manual"])  # muestra la pestaña
+
+        tab_name = self.tabs["Manual"]  
 
         import matplotlib.image as mpimg
         import os
@@ -320,6 +335,7 @@ class Gui:
 
     def Energy(self):
 
+        self.notebook.tab(self.window_names.index("Energy"), state="normal")
         self.approach.config(state="normal")
         tab_name = self.notebook.nametowidget(".!frame.!notebook.!frame2")
 
@@ -364,6 +380,7 @@ class Gui:
 
 
     def approach(self):
+        self.notebook.tab(self.window_names.index("Optimization"), state="normal")
         self.wave_f.config(state="normal")
         current_tab = self.notebook.nametowidget(".!frame.!notebook.!frame3")
 
@@ -413,6 +430,7 @@ class Gui:
     # ===================
 
     def wave_funtion(self):
+        self.notebook.tab(self.window_names.index("Wave function"), state="normal")
         self.density.config(state="normal")
         current_tab = self.notebook.nametowidget(".!frame.!notebook.!frame4")
 
@@ -457,6 +475,7 @@ class Gui:
         self.notebook.select(self.tabs["Wave function"])
 
     def density(self):
+        self.notebook.tab(self.window_names.index("Probability density"), state="normal")
         self.btn_about.config(state="normal")
         current_tab = self.notebook.nametowidget(".!frame.!notebook.!frame5")
 
@@ -526,6 +545,7 @@ class Gui:
         return self.epochs.get()
 
     def Algorithm(self):
+        self.notebook.tab(self.window_names.index("Algorithm"), state="normal")
         current_tab = self.notebook.nametowidget(".!frame.!notebook.!frame6")
         
         self.clean(current_tab)
@@ -568,7 +588,7 @@ class Gui:
         if tab_name in self.canvas_dict and self.canvas_dict[tab_name]:
             self.canvas_dict[tab_name].get_tk_widget().destroy()
             self.canvas_dict[tab_name] = None
-    
+
 if __name__ == "__main__":
     window = tk.Tk()
     window.config(bg="#FFFFFF")
